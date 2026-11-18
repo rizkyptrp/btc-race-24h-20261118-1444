@@ -72,6 +72,16 @@ function onBatch(state: BarsState, batch: Batch) {
   const held = qty > 0n;
   const n = closes.length;
 
+  // Track the trend state on every bar, flat or long, so a cross is never
+  // missed or double-counted because an exit happened in between.
+  // fastSum/120 > slowSum/240  <=>  fastSum * 2 > slowSum.
+  let crossedUp = false;
+  if (n >= SLOW_WINDOW) {
+    const fastAboveSlow = fastSum * 2n > slowSum;
+    crossedUp = prevFastAboveSlow === false && fastAboveSlow;
+    prevFastAboveSlow = fastAboveSlow;
+  }
+
   // --- exit logic, when long -------------------------------------------
   if (held && position !== undefined) {
     // Entry fill price, recovered exactly from the position's cost and qty:
@@ -105,10 +115,6 @@ function onBatch(state: BarsState, batch: Batch) {
   // --- entry logic, when flat ------------------------------------------
   if (n < SLOW_WINDOW) return [];
   if (n > TOTAL_BARS - NO_ENTRY_LAST_BARS) return [];
-  // fastSum/120 > slowSum/240  <=>  fastSum * 2 > slowSum.
-  const fastAboveSlow = fastSum * 2n > slowSum;
-  const crossedUp = prevFastAboveSlow === false && fastAboveSlow;
-  prevFastAboveSlow = fastAboveSlow;
   if (!crossedUp) return [];
   // Confirmation: the close must already be rising, not just drifting flat.
   const oldClose = closes[n - 1 - CONFIRM_WINDOW];
