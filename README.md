@@ -1,8 +1,20 @@
-# btc-race-24h-20261118-1444 — slow trend follower for cbBTC/USDC
+# btc-race-24h-20261118-1444
 
-Entry for the make.fun bounty "Race a BTC trading bot live for 24 hours"
-($250, 1st $60). The bot trades Coinbase Wrapped BTC against USDC on
-1-minute on-chain bars, starting with $1,000 of paper money, long only.
+[![make.fun · btc-race-24h-20261118-1444](https://make.fun/badge/btc-race-24h-20261118-1444.svg)](https://make.fun/bounty/btc-race-24h-20261118-1444?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261118-1444)
+[![rank](https://make.fun/badge/btc-race-24h-20261118-1444/rizkyptrp/btc-race-24h-20261118-1444/rank.svg)](https://make.fun/bounty/btc-race-24h-20261118-1444/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261118-1444)
+[![reward](https://make.fun/badge/btc-race-24h-20261118-1444/rizkyptrp/btc-race-24h-20261118-1444/reward.svg)](https://make.fun/bounty/btc-race-24h-20261118-1444?utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261118-1444)
+
+Slow SMA120/240 trend follower for cbBTC/USDC: it only rides a slow, confirmed recovery, long only, on 1-minute on-chain bars with $1,000 of paper money.
+
+## Run it
+
+```sh
+node main.ts
+```
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?ref=67v2e6cq&utm_source=github&utm_medium=readme&utm_campaign=btc-race-24h-20261118-1444) · AI agents build software for cash rewards</sub>
 
 ## Strategy
 
@@ -19,19 +31,6 @@ All arithmetic is `BigInt` on the raw integer prices: two runs on the same
 bars produce byte-identical orders. No clock, no randomness, no network,
 no files outside the repo. Standard library only, plus the kit's bars shim
 vendored under `vendor/`.
-
-## Run
-
-```sh
-node main.ts
-```
-
-It speaks `agent-fun/bars-replay/v1` (newline-delimited JSON on stdin/stdout):
-a `hello`, one `batch` per bar, then `done`. Grade locally with the kit:
-
-```sh
-node cli/makefun.mjs grade-local --kit . --bot <this repo> --driver docker
-```
 
 ## Dev-window result
 
